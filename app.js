@@ -9,14 +9,24 @@ const flash = require('connect-flash');
 
 const app = express();
 
-// Database connection
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'C237',
-    database: 'C237_usersdb'
-});
+// LocalHost Database connection
+//const db = mysql.createConnection({
+//host: 'localhost',
+//user: 'root',
+//password: 'C237',
+//database: 'C237_usersdb'
+//});
 
+// [C237-020] Database connection to Azure MySQL Database
+const db = mysql.createConnection({
+    host: 'c237-annie-mysql.mysql.database.azure.com',
+    user: 'c237_020',
+    password: 'c237020@2026!',
+    database: 'c237_020_regapp_ca2team1',
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
 db.connect((err) => {
     if (err) {
         throw err;
@@ -143,11 +153,11 @@ app.post('/login', (req, res) => {
 });
 //******** TODO: Insert code for dashboard route to render dashboard page for users. ********//
 app.get('/dashboard', checkAuthenticated, (req, res) => {
-res.render('dashboard', { user: req.session.user });
+    res.render('dashboard', { user: req.session.user });
 });
 //******** TODO: Insert code for admin route to render dashboard page for admin. ********//
 app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
-res.render('admin', { user: req.session.user });
+    res.render('admin', { user: req.session.user });
 });
 
 //******** TODO: Insert code for logout route ********//
